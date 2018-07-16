@@ -5,10 +5,11 @@ SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop';"]
 # install Git (especially for "go get")
 ENV GIT_VERSION 2.9.2
 ENV GIT_TAG v${GIT_VERSION}.windows.1
-ENV GIT_DOWNLOAD_URL https://github.com/git-for-windows/git/releases/download/${GIT_TAG}/Git-${GIT_VERSION}-64-bit.exe
+ENV GIT_DOWNLOAD_URL http://github.com/git-for-windows/git/releases/download/${GIT_TAG}/Git-${GIT_VERSION}-64-bit.exe
 ENV GIT_DOWNLOAD_SHA256 006d971bcbe73cc8d841a100a4eb20d22e135142bf5b0f2120722fd420e166e5
 # steps inspired by "chcolateyInstall.ps1" from "git.install" (https://chocolatey.org/packages/git.install)
 RUN Write-Host ('Downloading {0} ...' -f $env:GIT_DOWNLOAD_URL); \
+    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; \
 	(New-Object System.Net.WebClient).DownloadFile($env:GIT_DOWNLOAD_URL, 'git.exe'); \
 	\
 	Write-Host ('Verifying sha256 ({0}) ...' -f $env:GIT_DOWNLOAD_SHA256); \
